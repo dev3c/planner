@@ -1,0 +1,42 @@
+services:
+  painel:
+    build: .
+    image: via3/painel-projetos:1.0.0
+    container_name: via3-painel
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./dados:/app/data
+    # Sem HTTPS na frente (rede interna / atrás de outro proxy):
+    # descomente a linha abaixo e acesse http://IP-DO-SERVIDOR:3000
+    # ports:
+    #   - "3000:3000"
+    expose:
+      - "3000"
+    networks: [via3]
+
+  # HTTPS automático (Let's Encrypt). Exige um domínio apontando para o servidor
+  # e as portas 80/443 liberadas. Se for usar só na rede interna, remova este serviço
+  # e publique a porta 3000 no serviço acima.
+  proxy:
+    image: caddy:2-alpine
+    container_name: via3-painel-proxy
+    restart: unless-stopped
+    depends_on: [painel]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO:-painel.example.com.br}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [via3]
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  via3:

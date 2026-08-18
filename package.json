@@ -1,0 +1,23 @@
+{
+  "name": "via3-painel",
+  "version": "1.0.0",
+  "description": "Painel de Projetos — Via3 Tecnologia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "nodemailer": "^9.0.5"
+  },
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
